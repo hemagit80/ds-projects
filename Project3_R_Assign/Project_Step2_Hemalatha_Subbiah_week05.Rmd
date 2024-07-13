@@ -1,0 +1,317 @@
+---
+title: "Hemalatha_Subbiah_Project_Step2"
+author: "Hemalatha Subbiah"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+How to import and clean my data :
+================================
+
+```{r}
+
+## Set the working directory to the root of your DSC 520 directory
+## Load the `data/r4ds/week-6-housing.csv` to
+setwd("C:/MastersCourse/RAssignemtents/data")
+
+dailyActivity_data <- read.csv("dailyActivity_merged.csv", header = TRUE)
+head(dailyActivity_data)
+
+dailyCalories_data <- read.csv("dailyCalories_merged.csv", header = TRUE)
+head(dailyCalories_data)
+
+dailySteps_data <- read.csv("dailySteps_merged.csv", header = TRUE)
+head(dailySteps_data)
+
+sleepDay_data <- read.csv("sleepDay_merged.csv", header = TRUE)
+head(sleepDay_data)
+
+weightLogInfo_data <- read.csv("weightLogInfo_merged.csv", header = TRUE)
+head(weightLogInfo_data)
+
+```
+
+
+1. Clean column names
+
+
+2.Remove empty column or rows
+Suppose if you want to remove the column or row if contain completely empty, then you can use remove_empty function.
+
+
+
+3. To Exclude duplicates and remove null:
+```{r}
+dailyActivity_data <- unique(dailyActivity_data)                                      # Exclude duplicates
+dailyCalories_data <- unique(dailyCalories_data) 
+dailySteps_data <- unique(dailySteps_data) 
+sleepDay_data <- unique(sleepDay_data) 
+weightLogInfo_data <- unique(weightLogInfo_data) 
+
+sum(is.na(dailyActivity_data)) 
+sum(is.na(dailyCalories_data))
+sum(is.na(dailySteps_data))
+sum(is.na(sleepDay_data))
+sum(is.na(weightLogInfo_data))
+
+
+```
+
+
+4. Convert data type  
+```{r}
+
+sapply(dailyActivity_data, class)
+sapply(dailyCalories_data, class)
+sapply(dailySteps_data, class)
+sapply(sleepDay_data, class)
+sapply(weightLogInfo_data, class)
+
+dailyActivity_data <- type.convert(dailyActivity_data, as.is = TRUE)
+dailyCalories_data <- type.convert(dailyCalories_data, as.is = TRUE)
+dailySteps_data <- type.convert(dailySteps_data, as.is = TRUE)
+sleepDay_data <- type.convert(sleepDay_data, as.is = TRUE)
+weightLogInfo_data <- type.convert(weightLogInfo_data, as.is = TRUE)
+
+```
+
+5. Detect & Remove Outliers
+```{r}
+
+weightLogInfo_data$weight_kg[weightLogInfo_data$weight_kg%in% boxplot.stats(weightLogInfo_data$weight_kg)$out] 
+head(dailyActivity_data)
+
+```
+
+
+
+What does the final data set look like?
+========================================
+
+  It might be difficult to understand at first what the data means and what column names to use, but after couple of analysis was able to figure out the data.
+  
+#preparing daily activity dataset,
+
+```{r}
+
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+dailyActivity_data <- dailyActivity_data %>% mutate(day = as.Date(ActivityDate)) %>% select(-c(2,5:9))  
+print(paste(c("Rows: ", "Columns: "), dim(dailyActivity_data))) 
+dailyactivity <- distinct(dailyActivity_data)
+print(paste(c("Rows: ", "Columns: "), dim(dailyActivity_data)))
+ggplot(data=dailyActivity_data,aes(x=Id)) +
+  geom_bar() + ylab("day count")
+
+```
+
+```{r}
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+head(weightLogInfo_data)
+weightLogInfo_data <- weightLogInfo_data %>% mutate (time = mdy_hms(as.Date(Date)))%>% mutate(day = date(time)) %>% select(-c(2,5,8,9))
+print(paste(c("Rows: ", "Columns: "), dim(weightLogInfo_data))) 
+weightLogInfo_data <- distinct(weightLogInfo_data)
+print(paste(c("Rows: ", "Columns: "), dim(weightLogInfo_data)))
+head(weightLogInfo_data)
+ggplot(data=weightLogInfo_data, aes(x=Id)) +
+  geom_bar() + ylab("day count")
+```
+
+
+Merging data
+------------
+
+Before beginning to visualize the data, I need to merge two data sets. I’m going to merge (inner join) activity and sleep on columns Id and date (that I previously created after converting data to date time format).
+
+```{r}
+merged_data <- merge(sleepDay_data, dailyActivity_data,  by=c('Id'))
+head(merged_data)
+```
+
+```{r}
+merged_data <- merge(dailyActivity_data,  weightLogInfo_data, by=c('Id'))
+head(merged_data)
+```
+
+```{r}
+#joining the essential data frames earlier read above 
+head(dailyCalories_data)
+all_tables <- dailyActivity_data %>% full_join(sleepDay_data, by = c("Id")) %>% full_join(dailyCalories_data, by =c("Id")) %>% full_join(weightLogInfo_data, by =c("Id"))
+head(all_tables)
+```
+
+```{r}
+#day count for users who tracked their calories, checking frequency of daily use
+calories<-filter(all_tables,BMI!=0)%>% group_by(Id)%>% summarise(day_count= n_distinct(ActivityDay), .groups = "drop") 
+ggplot(data=calories, mapping=aes(x=Id, y=day_count)) + geom_line()+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+From the analysis I did the people are generally using fitness tracker to track activities and calories burned.And used it for sleep ans rest as well/
+
+What information is not self-evident?
+====================================
+
+1.Key demographics data such as gender, age, were not identified. This is a crucial missing how far women use activity trackers. 
+
+2.User's exercise habits differ between summer and winter as the data is just for 31 days limited.
+
+3.Health and lifestyle data is varied across different facets of society ,the data set is collected from small sample size.
+
+
+
+What are different ways you could look at this data?
+===================================================
+
+When I started analyzing the data, I want to set clear goals and expectations for what I wanted to learn and what insights you were expecting to find. 
+I see that outliers in the data may skew the  results. Significant outliers can easily skew averages in the data, so I may need to track the median rather than the mean. The median uses the middle value of the numerical data set, so it’s less skewed by outliers. Alternatively, I may need to discount these outliers from your analysis altogether.
+
+
+How do you plan to slice and dice the data?
+===========================================
+
+Slicing means filtering rows from the data set and dicing means select set of columns from the data set.
+
+With daily_activity data set,we will assume that days with < 200 TotalSteps taken, are days where users have not used their watches. We will filter out these inactive day and assign the following designations:
+
+Low Use - 1 to 14 days o
+Moderate Use - 15 to 21 days
+High Use - 22 to 31 days
+
+```{r}
+#data transformation to create df for 'Usage Types' 
+dailyActivity_data_group <- dailyActivity_data %>%
+  filter(TotalSteps >200 ) %>% 
+  group_by(Id) %>%
+  summarize(ActivityDate=sum(n())) %>%
+  mutate(Usage = case_when(
+    ActivityDate >= 1 & ActivityDate <= 14 ~ "Low Use",
+    ActivityDate >= 15 & ActivityDate <= 21 ~ "Moderate Use", 
+    ActivityDate >= 22 & ActivityDate <= 31 ~ "High Use")) %>% 
+  mutate(Usage = factor(Usage, level = c('Low Use','Moderate Use','High Use'))) %>% 
+  rename(daysused = ActivityDate) %>% 
+  group_by(Usage)
+head(dailyActivity_data_group)
+```
+
+
+```{r}
+
+daily_use <- dailyActivity_data %>% 
+  left_join(dailyActivity_data_group, by = 'Id') %>%
+  group_by(Usage) %>% 
+  summarise(participants = n_distinct(Id)) %>% 
+  mutate(perc = participants/sum(participants)) %>% 
+  arrange(perc) %>% 
+  mutate(perc = scales::percent(perc))
+head(daily_use)
+
+
+```
+Above analysis ascertain how often the participants use their watches.We will filter out these how the activity trackers are used by the participant and categorized in to 3 parts.
+
+
+How could you summarize your data to answer key questions?
+==========================================================
+
+```{r}
+# activity
+dailyActivity_data %>%  
+  select(TotalSteps,
+         TotalDistance,
+         SedentaryMinutes, Calories) %>%
+  summary()
+
+# explore num of active minutes per category
+dailyActivity_data %>%
+  select(VeryActiveMinutes, FairlyActiveMinutes, LightlyActiveMinutes) %>%
+  summary()
+
+# calories
+dailyCalories_data %>%
+  select(Calories) %>%
+  summary()
+# sleep
+sleepDay_data %>%
+  select(TotalSleepRecords, TotalMinutesAsleep, TotalTimeInBed) %>%
+  summary()
+# weight
+weightLogInfo_data %>%
+  select(WeightKg, BMI) %>%
+  summary()
+```
+Total Average step per day is 7638.They found that taking 8,000 steps per day was associated with a 51% lower risk for all-cause mortality (or death from all causes). Taking 12,000 steps per day was associated with a 65% lower risk compared with taking 4,000 steps.
+The majority of the participants are lightly active.
+
+
+
+
+What types of plots and tables will help you to illustrate the findings to your questions?
+==========================================================================================
+
+```{r}
+ggplot(data=dailyActivity_data, aes(x=TotalSteps, y=Calories)) + 
+  geom_point() + geom_smooth() + labs(title="Total Steps vs. Calories")
+```
+
+I see positive correlation here between Total Steps and Calories, which is obvious - the more active we are, the more calories we burn.
+
+```{r}
+ggplot(data=sleepDay_data, aes(x=TotalMinutesAsleep, y=TotalTimeInBed)) + 
+  geom_point()+ labs(title="Total Minutes Asleep vs. Total Time in Bed")
+```
+The relationship between Total Minutes Asleep and Total Time in Bed looks linear. So if the Activity tracker users want to improve their sleep, we should consider using notification to go to sleep.
+
+
+
+```{r}
+merged_data <- merge(sleepDay_data, dailyActivity_data,  by=c('Id'))
+head(merged_data)
+
+ggplot(data=merged_data, aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) + 
+geom_point(color='darkblue') + geom_smooth() +
+  labs(title="Minutes Asleep vs. Sedentary Minutes")
+```
+
+
+Do you plan on incorporating any machine learning techniques to answer your research questions? Explain :
+=======================================================================================================
+
+Machine learning uses two techniques: supervised learning, which trains a model on known input and output data to predict future outputs, and unsupervised learning, which uses hidden patterns or internal structures in the input data.
+
+In my use case its using Supervised machine learning creates a model that makes predictions based on evidence in the presence of uncertainty. A supervised learning algorithm takes a known set of input data and known responses to the data (output) and trains a model to generate reasonable predictions for the response to the new data. Use supervised learning if you have known data for the output you are trying to estimate.
+
+Planning to use  classification and regression techniques to develop machine learning models for my use case.
+
+Regression analysis is used to estimate the relationship between a set of variables. When conducting any type of regression analysis, you’re looking to see if there’s a correlation between a dependent variable (that’s the variable or outcome you want to measure or predict) and any number of independent variables (factors which may have an impact on the dependent variable). The aim of regression analysis is to estimate how one or more variables might impact the dependent variable, in order to identify trends and patterns. This is especially useful for making predictions and forecasting future trends.
+
+Questions for future steps :
+==========================
+
+1.What are the effects of using these devices and correlating them to Relationship satisfaction or quality of life?
+
+2. What changes to dietary and life style choices after watching the data ?
+
+3.Predicting cholestrol depending on factors like calorie in take, weight, no. of steps walked every day, distance covered, heart     rate bpm, types of type of physical excercise,Although one of these activities you have to track outside of Activity Trackers.
+    What all more factors as you see fit?
+
+4.What type of decisions will our data science feature drive?
+
+5.What metric will we use to call this project a success and how will we measure it?
+
+6.what do they currently use and what is the baseline (current) value of that metric?
+
+7.What the outcome of this project success?
+
+

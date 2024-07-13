@@ -1,0 +1,588 @@
+---
+title: "Hemalatha_Subbiah_Project_Final"
+author: "Hemalatha Subbiah"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+## R Markdown
+
+Introduction 
+===============
+
+  An activity tracker is a type of electronic device that helps monitor some type of human activity, such as walking or running, sleep quality or heart rate.Better's research shows that almost three-quarters of people who wear fitness trackers do so to monitor their progress, while 62% of wearers use them to increase their motivation to exercise. Another 46% want to understand their body better by tracking things like their heart rate, steps taken and calories burned.Activity trackers are devices that translate movement into different forms of data. Most trackers will provide estimates of steps, distance, and active minutes.
+
+Problem Statement
+=================
+
+  This data science project aims to help data scientists develop an intelligent model for how can your own personal analysis data assist you in living a better life?
+ To solve this project related to data science, the popular Kaggle dataset containing activity tracker transaction made in September 2016 by individuals.This Kaggle data set contains personal fitness tracker from thirty activity tracker users. The dataset contains 18 .csv files, which is used are about activity, calories, intensity, steps, and sleep time.
+  Activity tracker collect continuous physiological measurement and are generating gigabytes of data every single minute. Fitbit reports that they have over 150 billion hours of heart rate recorded, and over 6 billion recorded nights of human sleep.
+While this data is extremely useful for gathering information at the population-level, how can your own personal analysis assist you in living a better life?
+  Do activity trackers really help to better your health?All the information exists at your fingertips (or on your wrist), and we can make it actionable
+
+Research questions
+==================
+
+  1. Do people have Awareness to relate the data to personal health ?
+  2. What are some trends in smart device usage?
+  3. How could these trends apply to activity trackers customers?
+  4. How could these trends help influence good health Business task?
+  5. Identify potential opportunities for growth and recommendations for the Bellabeat marketing strategy improvement based on            trends   in smart device usage.
+  6. Is it focused own women from all countries?
+  7. IS tracking physical activity, mental state, menstrual cycle helps them to improve health better?
+  8. Is it possible to collect a large amount of data about personal activity relatively inexpensively?
+  9. Do people have Awareness to relate the data to personal health ?
+
+Approach 
+=========
+
+  Business understanding
+  Generate Your Hypotheses
+  Study the data
+  Clean the data
+  Engineer the features
+  Model Fitting
+  Making Prediction
+
+
+How your approach addresses (fully or partially) the problem 
+============================================================
+
+  Business understanding : In business understand phase we basically Understands the business process,Define and Frame the            business problem,define the business objective and agree on success criteria.In my project how the activity trackers really       help to better your health and the business task is to identify themes/trends in how people currently use their smart devices
+    and relate to their own health.
+    
+  Data understanding :  Understand data touch points in the context of business process and gather knowledge on where data            originates from, how it gets processed, what decisions are being made, where it is getting stored and how it flows to             downstream.Deep dive into business meaning of the data being leveraged as well as knowledge present in existing system in form     of rules.
+    For this project this dataset would have been more reliable, original, current, and cited; albeit data privacy would have to      be carefully guarded.However, since this is a hypothetical scenario and this is the only dataset available, I’ll make do.
+  
+  Data preparation and Cleaning :Good data hygiene is so important for business. For starters, it’s good practice to keep on top      of your data, ensuring that it’s accurate and up-to-date.As part of data cleaning I want to 
+        a) Get rid of unwanted observations 
+        b) Fix structural errors - Removed inconsistent capitalization, which often occur during manual data entry
+        c) Remove unwanted outliers- Removed few outliners in the data
+        d) Fix contradictory data errors
+        e) Type conversion and syntax errors
+        f ) Validate your dataset for null values and condition them.
+  All the above steps will be completed as part of data sets I picked for this project.      
+        
+  Modeling :Build predictive model variables and do feature engineering and fit an closest model to the problem solution.
+  
+  Validation : Validating the model by training the model.
+  Deployment : The concept of deployment in data science refers to the application of a model for prediction using a new data.        Building a model is generally not the end of the project. Even if the purpose of the model is to increase knowledge of the        data, the knowledge gained will need to be organized and presented in a way that the customer can use it. Depending on the        requirements, the deployment phase can be as simple as generating a report or as complex as implementing a repeatable data        science process.
+
+Data  (Minimum of 3 Datasets - but no requirement on number of fields or rows) 
+==============================================================================
+
+  The dataset used for this analysis is FitBit Fitness Tracker Data hosted on Kaggle or Zenodo.
+It comprises .csv files of various fitness metrics measured from different users at different times, stored in a wide format.
+The fitness tracker data was provided by 30 respondents to a paid distributed survey on Amazon Mechanical Turk in 2016.
+
+  Limitations of DataSet:
+Data was collected in 2016, hence data may not be relevant to modern trends.
+Small sample size of only 30 participants. Data does not include demographics about the sample such as sex, age, or geographical location. This may not be a good representation of the population of women globally who would use a similar product.Survey style of data collection may be subject to response bias. Integrity and accuracy of data is not clear.
+
+  Inital observations of these CSVs within Mircosoft Excel shows that these files contain acitvites, calory records, physical acitivity records, step record, sleep monitoring, heart rate, weight and BMI calculations. Using simple unique formula against unique ID of users bring out the fact that these files contain the above mentioned data for anywhere between 8 to 33 users. Another point to be noted here is the fact that some of these numbers are manual input of users, such as weight in the weightLogInfo_merged.csv file.
+
+```{r}
+
+## Set the working directory to the root of your DSC 520 directory
+## Load the `data/r4ds/week-6-housing.csv` to
+setwd("C:/MastersCourse/RAssignemtents/data")
+
+dailyActivity_data <- read.csv("dailyActivity_merged.csv", header = TRUE)
+head(dailyActivity_data)
+
+dailyCalories_data <- read.csv("dailyCalories_merged.csv", header = TRUE)
+head(dailyActivity_data)
+
+dailySteps_data <- read.csv("dailySteps_merged.csv", header = TRUE)
+head(dailySteps_data)
+
+sleepDay_data <- read.csv("sleepDay_merged.csv", header = TRUE)
+head(sleepDay_data)
+
+weightLogInfo_data <- read.csv("weightLogInfo_merged.csv", header = TRUE)
+head(weightLogInfo_data)
+
+
+
+```
+
+
+Required Packages 
+===============
+library("tidyverse")
+library("car")
+library("ggplot")
+library("dplyr")
+library("ggplot2")
+library("tidyr")
+library("dply")
+
+
+Plots and Table Needs 
+=====================
+
+ggplot :
+histogram :
+Density Curves :
+Box plot :
+Line Plot :
+Scatter Diagram :
+
+
+Questions for future steps :
+==============================
+
+1.A time series analysis of your heart rate to forecast your future heart rate and comparing it with normal healthy heart rate
+  may lead to think of healthy lie style.
+
+2. What changes to dietary and life style choices after watching the data ?
+
+3.Predicting cholestrol depending on factors like calorie in take, weight, no. of steps walked every day, distance covered, heart     rate bpm, types of type of physical excercise,Although one of these activities you have to track outside of Activity Trackers.
+    What all more factors as you see fit?
+
+4.What are the effects of using these devices and correlating them to Relationship satisfaction or quality of life?
+
+5.What type of decisions will our data science feature drive?
+
+6.What metric will we use to call this project a success and how will we measure it?
+
+7.what do they currently use and what is the baseline (current) value of that metric?
+
+8.What the outcome of this project success?
+
+
+
+How to import and clean my data :
+================================
+
+```{r}
+
+## Set the working directory to the root of your DSC 520 directory
+## Load the `data/r4ds/week-6-housing.csv` to
+setwd("C:/MastersCourse/RAssignemtents/data")
+
+dailyActivity_data <- read.csv("dailyActivity_merged.csv", header = TRUE)
+head(dailyActivity_data)
+
+dailyCalories_data <- read.csv("dailyCalories_merged.csv", header = TRUE)
+head(dailyCalories_data)
+
+dailySteps_data <- read.csv("dailySteps_merged.csv", header = TRUE)
+head(dailySteps_data)
+
+sleepDay_data <- read.csv("sleepDay_merged.csv", header = TRUE)
+head(sleepDay_data)
+
+weightLogInfo_data <- read.csv("weightLogInfo_merged.csv", header = TRUE)
+head(weightLogInfo_data)
+
+```
+
+
+1. Clean column names
+
+
+2.Remove empty column or rows
+Suppose if you want to remove the column or row if contain completely empty, then you can use remove_empty function.
+
+
+
+3. To Exclude duplicates and remove null:
+```{r}
+dailyActivity_data <- unique(dailyActivity_data)                                      # Exclude duplicates
+dailyCalories_data <- unique(dailyCalories_data) 
+dailySteps_data <- unique(dailySteps_data) 
+sleepDay_data <- unique(sleepDay_data) 
+weightLogInfo_data <- unique(weightLogInfo_data) 
+
+sum(is.na(dailyActivity_data)) 
+sum(is.na(dailyCalories_data))
+sum(is.na(dailySteps_data))
+sum(is.na(sleepDay_data))
+sum(is.na(weightLogInfo_data))
+
+
+```
+
+
+4. Convert data type  
+```{r}
+
+sapply(dailyActivity_data, class)
+sapply(dailyCalories_data, class)
+sapply(dailySteps_data, class)
+sapply(sleepDay_data, class)
+sapply(weightLogInfo_data, class)
+
+dailyActivity_data <- type.convert(dailyActivity_data, as.is = TRUE)
+dailyCalories_data <- type.convert(dailyCalories_data, as.is = TRUE)
+dailySteps_data <- type.convert(dailySteps_data, as.is = TRUE)
+sleepDay_data <- type.convert(sleepDay_data, as.is = TRUE)
+weightLogInfo_data <- type.convert(weightLogInfo_data, as.is = TRUE)
+
+```
+
+5. Detect & Remove Outliers
+```{r}
+
+weightLogInfo_data$weight_kg[weightLogInfo_data$weight_kg%in% boxplot.stats(weightLogInfo_data$weight_kg)$out] 
+head(dailyActivity_data)
+
+```
+
+
+
+What does the final data set look like?
+========================================
+
+  It might be difficult to understand at first what the data means and what column names to use, but after couple of analysis was able to figure out the data.
+  
+#preparing daily activity dataset,
+
+```{r}
+
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+dailyActivity_data <- dailyActivity_data %>% mutate(day = as.Date(ActivityDate)) %>% select(-c(2,5:9))  
+print(paste(c("Rows: ", "Columns: "), dim(dailyActivity_data))) 
+dailyactivity <- distinct(dailyActivity_data)
+print(paste(c("Rows: ", "Columns: "), dim(dailyActivity_data)))
+ggplot(data=dailyActivity_data,aes(x=Id)) +
+  geom_bar() + ylab("day count")
+
+```
+
+```{r}
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+head(weightLogInfo_data)
+weightLogInfo_data <- weightLogInfo_data %>% mutate (time = mdy_hms(as.Date(Date)))%>% mutate(day = date(time)) %>% select(-c(2,5,8,9))
+print(paste(c("Rows: ", "Columns: "), dim(weightLogInfo_data))) 
+weightLogInfo_data <- distinct(weightLogInfo_data)
+print(paste(c("Rows: ", "Columns: "), dim(weightLogInfo_data)))
+head(weightLogInfo_data)
+ggplot(data=weightLogInfo_data, aes(x=Id)) +
+  geom_bar() + ylab("day count")
+```
+
+
+Merging data
+------------
+
+Before beginning to visualize the data, I need to merge two data sets. I’m going to merge (inner join) activity and sleep on columns Id and date (that I previously created after converting data to date time format).
+
+```{r}
+merged_data <- merge(sleepDay_data, dailyActivity_data,  by=c('Id'))
+head(merged_data)
+```
+
+```{r}
+merged_data <- merge(dailyActivity_data,  weightLogInfo_data, by=c('Id'))
+head(merged_data)
+```
+
+```{r}
+#joining the essential data frames earlier read above 
+head(dailyCalories_data)
+all_tables <- dailyActivity_data %>% full_join(sleepDay_data, by = c("Id")) %>% full_join(dailyCalories_data, by =c("Id")) %>% full_join(weightLogInfo_data, by =c("Id"))
+head(all_tables)
+```
+
+```{r}
+#day count for users who tracked their calories, checking frequency of daily use
+calories<-filter(all_tables,BMI!=0)%>% group_by(Id)%>% summarise(day_count= n_distinct(ActivityDay), .groups = "drop") 
+ggplot(data=calories, mapping=aes(x=Id, y=day_count)) + geom_line()+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+From the analysis I did the people are generally using fitness tracker to track activities and calories burned.And used it for sleep ans rest as well/
+
+What information is not self-evident?
+====================================
+
+1.Key demographics data such as gender, age, were not identified. This is a crucial missing how far women use activity trackers. 
+
+2.User's exercise habits differ between summer and winter as the data is just for 31 days limited.
+
+3.Health and lifestyle data is varied across different facets of society ,the data set is collected from small sample size.
+
+
+
+What are different ways you could look at this data?
+===================================================
+
+When I started analyzing the data, I want to set clear goals and expectations for what I wanted to learn and what insights you were expecting to find. 
+I see that outliers in the data may skew the  results. Significant outliers can easily skew averages in the data, so I may need to track the median rather than the mean. The median uses the middle value of the numerical data set, so it’s less skewed by outliers. Alternatively, I may need to discount these outliers from your analysis altogether.
+
+
+How do you plan to slice and dice the data?
+===========================================
+
+Slicing means filtering rows from the data set and dicing means select set of columns from the data set.
+
+With daily_activity data set,we will assume that days with < 200 TotalSteps taken, are days where users have not used their watches. We will filter out these inactive day and assign the following designations:
+
+Low Use - 1 to 14 days o
+Moderate Use - 15 to 21 days
+High Use - 22 to 31 days
+
+```{r}
+#data transformation to create df for 'Usage Types' 
+dailyActivity_data_group <- dailyActivity_data %>%
+  filter(TotalSteps >200 ) %>% 
+  group_by(Id) %>%
+  summarize(ActivityDate=sum(n())) %>%
+  mutate(Usage = case_when(
+    ActivityDate >= 1 & ActivityDate <= 14 ~ "Low Use",
+    ActivityDate >= 15 & ActivityDate <= 21 ~ "Moderate Use", 
+    ActivityDate >= 22 & ActivityDate <= 31 ~ "High Use")) %>% 
+  mutate(Usage = factor(Usage, level = c('Low Use','Moderate Use','High Use'))) %>% 
+  rename(daysused = ActivityDate) %>% 
+  group_by(Usage)
+head(dailyActivity_data_group)
+```
+
+
+```{r}
+
+daily_use <- dailyActivity_data %>% 
+  left_join(dailyActivity_data_group, by = 'Id') %>%
+  group_by(Usage) %>% 
+  summarise(participants = n_distinct(Id)) %>% 
+  mutate(perc = participants/sum(participants)) %>% 
+  arrange(perc) %>% 
+  mutate(perc = scales::percent(perc))
+head(daily_use)
+
+
+```
+Above analysis ascertain how often the participants use their watches.We will filter out these how the activity trackers are used by the participant and categorized in to 3 parts.
+
+
+How could you summarize your data to answer key questions?
+==========================================================
+
+```{r}
+# activity
+dailyActivity_data %>%  
+  select(TotalSteps,
+         TotalDistance,
+         SedentaryMinutes, Calories) %>%
+  summary()
+
+# explore num of active minutes per category
+dailyActivity_data %>%
+  select(VeryActiveMinutes, FairlyActiveMinutes, LightlyActiveMinutes) %>%
+  summary()
+
+# calories
+dailyCalories_data %>%
+  select(Calories) %>%
+  summary()
+# sleep
+sleepDay_data %>%
+  select(TotalSleepRecords, TotalMinutesAsleep, TotalTimeInBed) %>%
+  summary()
+# weight
+weightLogInfo_data %>%
+  select(WeightKg, BMI) %>%
+  summary()
+```
+Total Average step per day is 7638.They found that taking 8,000 steps per day was associated with a 51% lower risk for all-cause mortality (or death from all causes). Taking 12,000 steps per day was associated with a 65% lower risk compared with taking 4,000 steps.
+The majority of the participants are lightly active.
+
+
+
+
+What types of plots and tables will help you to illustrate the findings to your questions?
+==========================================================================================
+
+```{r}
+ggplot(data=dailyActivity_data, aes(x=TotalSteps, y=Calories)) + 
+  geom_point() + geom_smooth() + labs(title="Total Steps vs. Calories")
+```
+
+I see positive correlation here between Total Steps and Calories, which is obvious - the more active we are, the more calories we burn.
+
+```{r}
+ggplot(data=sleepDay_data, aes(x=TotalMinutesAsleep, y=TotalTimeInBed)) + 
+  geom_point()+ labs(title="Total Minutes Asleep vs. Total Time in Bed")
+```
+The relationship between Total Minutes Asleep and Total Time in Bed looks linear. So if the Activity tracker users want to improve their sleep, we should consider using notification to go to sleep.
+
+
+
+```{r}
+merged_data <- merge(sleepDay_data, dailyActivity_data,  by=c('Id'))
+head(merged_data)
+
+ggplot(data=merged_data, aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) + 
+geom_point(color='darkblue') + geom_smooth() +
+  labs(title="Minutes Asleep vs. Sedentary Minutes")
+```
+
+
+Do you plan on incorporating any machine learning techniques to answer your research questions? Explain :
+=======================================================================================================
+
+Machine learning uses two techniques: supervised learning, which trains a model on known input and output data to predict future outputs, and unsupervised learning, which uses hidden patterns or internal structures in the input data.
+
+In my use case its using Supervised machine learning creates a model that makes predictions based on evidence in the presence of uncertainty. A supervised learning algorithm takes a known set of input data and known responses to the data (output) and trains a model to generate reasonable predictions for the response to the new data. Use supervised learning if you have known data for the output you are trying to estimate.
+
+Planning to use  classification and regression techniques to develop machine learning models for my use case.
+
+Regression analysis is used to estimate the relationship between a set of variables. When conducting any type of regression analysis, you’re looking to see if there’s a correlation between a dependent variable (that’s the variable or outcome you want to measure or predict) and any number of independent variables (factors which may have an impact on the dependent variable). The aim of regression analysis is to estimate how one or more variables might impact the dependent variable, in order to identify trends and patterns. This is especially useful for making predictions and forecasting future trends.
+
+Questions for future steps :
+==========================
+
+1.What are the effects of using these devices and correlating them to Relationship satisfaction or quality of life?
+
+2. What changes to dietary and life style choices after watching the data ?
+
+3.Predicting cholestrol depending on factors like calorie in take, weight, no. of steps walked every day, distance covered, heart     rate bpm, types of type of physical excercise,Although one of these activities you have to track outside of Activity Trackers.
+    What all more factors as you see fit?
+
+4.What type of decisions will our data science feature drive?
+
+5.What metric will we use to call this project a success and how will we measure it?
+
+6.what do they currently use and what is the baseline (current) value of that metric?
+
+7.What the outcome of this project success?
+
+
+
+Introduction.
+============
+
+  An activity tracker is a type of electronic device that helps monitor some type of human activity, such as walking or running, sleep quality or heart rate.Better's research shows that almost three-quarters of people who wear fitness trackers do so to monitor their progress, while 62% of wearers use them to increase their motivation to exercise. Another 46% want to understand their body better by tracking things like their heart rate, steps taken and calories burned.Activity trackers are devices that translate movement into different forms of data. Most trackers will provide estimates of steps, distance, and active minutes.
+
+
+The problem statement you addressed. 
+====================================
+
+  This data science project aims to help data scientists develop an intelligent model for how can your own personal analysis data assist you in living a better life?
+ To solve this project related to data science, the popular Kaggle dataset containing activity tracker transaction made in September 2016 by individuals.This Kaggle data set contains personal fitness tracker from thirty activity tracker users. The dataset contains 18 .csv files, which is used are about activity, calories, intensity, steps, and sleep time.
+  Activity tracker collect continuous physiological measurement and are generating gigabytes of data every single minute. Fitbit reports that they have over 150 billion hours of heart rate recorded, and over 6 billion recorded nights of human sleep.
+While this data is extremely useful for gathering information at the population-level, how can your own personal analysis assist you in living a better life?
+  Do activity trackers really help to better your health?All the information exists at your fingertips (or on your wrist), and we can make it actionable.
+
+How you addressed this problem statement
+========================================
+  I followed the below workflow to address the problem statement and derive the solution.Understanding and framing the problem is the first step of the data science life cycle.Found above problem statement which interested me about the activity tracker.
+  The next step is to collect the right set of data. High-quality, targeted data—and the mechanisms to collect them—are crucial to obtaining meaningful results. Since much of the roughly 2.5 quintillion bytes of data created every day come in unstructured formats, you’ll likely need to extract the data and export it into a usable format, such as a CSV or JSON file. Used popular Kaggle data set containing activity tracker transaction made in September 2016 by individuals.
+  Most of the data you collect during the collection phase will be unstructured, irrelevant, and unfiltered. Bad data produces bad results, so the accuracy and efficacy of your analysis will depend heavily on the quality of your data.Cleaning data eliminates duplicate and null values,corrupt data,inconsistent data types, invalid entries, missing data, and improper formatting.Followed methods available in R to clean the the null values,duplicates and unwanted datas.
+  Did Exploratory Data Analysis on data helped me to look at data before making any assumptions.It helped me to identify obvious errors, as well as better understand patterns within the data, detect outliners or anomalous events, find interesting relations among the variables.on the EDA can help answer questions about standard deviations, categorical variables, and confidence intervals. Once EDA is completed and insights are drawn,used its features for sophisticated data analysis or modeling,including machine learning.
+  Then I tried doing Model Analysis where I planned to use  machine learning, statistical models,and algorithms to extract high-value insights and predictions.
+
+Analysis.
+=========
+
+
+```{r}
+
+## Set the working directory to the root of your DSC 520 directory
+## Load the `data/r4ds/week-6-housing.csv` to
+setwd("C:/MastersCourse/RAssignemtents/data")
+
+dailyActivity_data <- read.csv("dailyActivity_merged.csv", header = TRUE)
+head(dailyActivity_data)
+
+dailyCalories_data <- read.csv("dailyCalories_merged.csv", header = TRUE)
+head(dailyCalories_data)
+
+dailySteps_data <- read.csv("dailySteps_merged.csv", header = TRUE)
+head(dailySteps_data)
+
+sleepDay_data <- read.csv("sleepDay_merged.csv", header = TRUE)
+head(sleepDay_data)
+
+weightLogInfo_data <- read.csv("weightLogInfo_merged.csv", header = TRUE)
+head(weightLogInfo_data)
+
+```
+
+
+  I did analysis on usage distribution.Here we will ascertain how often the participants use their watches. With daily_activity, we will assume that days with < 200 TotalSteps taken, are days where users have not used their watches. We will filter out these inactive day and assign the following designations:
+
+Low Use - 1 to 14 days o
+Moderate Use - 15 to 21 days
+High Use - 22 to 31 days
+
+Average Steps By Hour, Day & Usage Types 
+verage hourly steps increases as usage of devices increases across Usage Groups.
+
+'High Use' group start their day an hour earlier (6:00AM) compared to other groups. Maintaining a higher average hourly step across all days of the week. Peaks in steps taken are consistently high between 5:00 - 8:00PM, suggesting habitual excercise as work ends.
+
+'Moderate Use' group display peaks in their steps between 11:00AM - 12:00PM, and a rise between 6:00PM - 7:00PM.
+
+'Low Use' group does not seem to display any symmetrical distribution of steps on any day of the week. This could be attributed to data gaps due to infrequent use.
+
+Saturday is the most active day across all Usage Groups.
+
+The 'High Use' group in general have a higher median calorie range compared to the upper quartile of moderate users. They also have a wider range the calories burnt each day of the week, displaying high variability of activities between users in this group. They are also much more consistent in carrying out physical activities throughout the week. No showing a bias on which days to be active.
+
+The ' Moderate Use' group shows consistency in their daily average calorie burn. Saturdays are the most active day during week, displaying a preference to be active on this day
+
+'High Use' participants have the most 'Lightly Active', 'Fairly Active' and 'Very Active' minutes across all groups. Subsequently, the spend the least time, 78.7% being sedentary.
+Unsurprisingly, thw 'Low Use' participants spend 93.2% of their day being sedentary.
+
+Correlation study :
+we plot out the distribution of sleep for all participants based on the number of hours of sleep recommended by the National Sleep Foundation:
+
+```{r}
+library("dplyr")
+library("tidyr")
+sleepday2 <- sleepDay_data %>% 
+  select(TotalMinutesAsleep) %>% 
+  drop_na() %>% 
+  mutate(sleep_quality = ifelse(TotalMinutesAsleep <= 360, 'Below Recommended',
+                         ifelse(TotalMinutesAsleep <= 420,  'Fairly Recommended',
+                         ifelse(TotalMinutesAsleep <= 540, 'Recommended', 'Above Recommended')))) %>% 
+  mutate(sleep_quality = factor(sleep_quality,level = c('Below Recommended', 'Fairly Recommended',
+                                    'Recommended','Above Recommended')))
+head(sleepday2)
+```
+
+Below Recommended - < 6 hours of sleep
+Fairly Recommended - 6 and 7 hours of sleep
+Recommended - 7 and 9 hours of sleep
+Above Recommended - > 9 hours of sleep
+
+
+```{r}
+#joining the essential data frames earlier read above 
+head(dailyCalories_data)
+all_tables <- dailyActivity_data %>% full_join(sleepDay_data, by = c("Id")) %>% full_join(dailyCalories_data, by =c("Id")) %>% full_join(weightLogInfo_data, by =c("Id"))
+str(all_tables)
+nrow(all_tables)
+```
+
+```{r}
+set.seed(123)
+dat.d <- sample(1:nrow(all_tables),size=nrow(all_tables)*0.7,replace = FALSE) #random selection of 70% data.
+ 
+train.loan <- all_tables[dat.d,] # 70% training data
+test.loan <- all_tables[-dat.d,] # remaining 30% test data
+
+```
+
+Limitations :
+===========
+  
+  Data was collected in 2016, hence data may not be relevant to modern trends.
+Small sample size of only 30 participants. Data does not include demographics about the sample such as sex, age, or geographical location. This may not be a good representation of the population of women globally who would use a similar product.Survey style of data collection may be subject to response bias. Integrity and accuracy of data is not clear.
+
+  Inital observations of these CSVs within Mircosoft Excel shows that these files contain acitvites, calory records, physical acitivity records, step record, sleep monitoring, heart rate, weight and BMI calculations. Using simple unique formula against unique ID of users bring out the fact that these files contain the above mentioned data for anywhere between 8 to 33 users. Another point to be noted here is the fact that some of these numbers are manual input of users, such as weight in the weightLogInfo_merged.csv file.
+  
+Concluding Remarks
+================== :
+
+   Of course, we need much more data to draw conclusions but this preliminary analysis looks promising and suggests that there may be a correlation between Tracker Distance,Calories and Weight Pounds.More tracking is happened by wearable devices that can help you in archiving your goals and finally make sense of all the data generated by your watch.
+
+
